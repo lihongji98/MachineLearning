@@ -32,6 +32,10 @@ class Transformer(nn.Module):
         self.src_positional_encoding = PositionalEncoding(embedding_dim, max_len=max_len)
         self.trg_positional_encoding = PositionalEncoding(embedding_dim, max_len=max_len)
 
+        for p in self.parameters():
+            if p.dim() > 1:
+                nn.init.kaiming_uniform_(p, nonlinearity="relu")
+
     def forward(self, src, trg):
         src_mask = (src != 0).unsqueeze(1).unsqueeze(2)
         N, trg_len = trg.shape
