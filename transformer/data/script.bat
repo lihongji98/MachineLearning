@@ -5,13 +5,17 @@ choice /c yn /m "Enter Y or N"
 
 if errorlevel 2 goto :eof
 
+REM Define lang
+set "src=de"
+set "trg=en"
+
 REM Define paths
 set "SCRIPTS=D:\nmt\mosesdecoder\scripts"
 set "BPEROOT=D:\nmt\subword-nmt\subword_nmt"
 
 REM Define directories
 set "data_dir=D:\pycharm_projects\MachineLearning\transformer\data"
-set "model_dir=D:\pycharm_projects\MachineLearning\transformer\model"
+set "model_dir=D:\pycharm_projects\MachineLearning\transformer\voc"
 
 REM Define tools
 set "TOKENIZER=%SCRIPTS%\tokenizer\tokenizer.perl"
@@ -22,50 +26,51 @@ set "CLEAN=%SCRIPTS%\training\clean-corpus-n.perl"
 
 REM Run Perl commands
 echo NORM_PUNCTUALIZING...
-perl "%NORM_PUNC%" -l en < "%data_dir%\raw.en" > "%data_dir%\norm.en"
-perl "%NORM_PUNC%" -l en < "%data_dir%\raw.no" > "%data_dir%\norm.no"
+perl "%NORM_PUNC%" -l %trg% < "%data_dir%\raw.%src%" > "%data_dir%\norm.%src%"
+perl "%NORM_PUNC%" -l %src% < "%data_dir%\raw.%trg%" > "%data_dir%\norm.%trg%"
 
 echo TOKENIZING...
-perl "%TOKENIZER%" -l en < "%data_dir%\norm.en" > "%data_dir%\norm_tok.en"
-perl "%TOKENIZER%" -l no < "%data_dir%\norm.no" > "%data_dir%\norm_tok.no"
+perl "%TOKENIZER%" -l %trg% < "%data_dir%\norm.%src%" > "%data_dir%\norm_tok.%src%"
+perl "%TOKENIZER%" -l %src% < "%data_dir%\norm.%trg%" > "%data_dir%\norm_tok.%trg%"
 
-del /F /Q "%data_dir%\norm.en"
-del /F /Q "%data_dir%\norm.no"
-
-echo TRANING AND TRUECASING...
-perl "%TRAIN_TC%" --model "%model_dir%\truecase-model.en" --corpus "%data_dir%\norm_tok.en"
-perl "%TC%" --model "%model_dir%\truecase-model.en" < "%data_dir%\norm_tok.en" > "%data_dir%\norm_tok_true.en"
+del /F /Q "%data_dir%\norm.%trg%"
+del /F /Q "%data_dir%\norm.%src%"
 
 echo TRANING AND TRUECASING...
-perl "%TRAIN_TC%" --model "%model_dir%\truecase-model.no" --corpus "%data_dir%\norm_tok.no"
-perl "%TC%" --model "%model_dir%\truecase-model.no" < "%data_dir%\norm_tok.no" > "%data_dir%\norm_tok_true.no"
+perl "%TRAIN_TC%" --model "%model_dir%\truecase-model.%trg%" --corpus "%data_dir%\norm_tok.%trg%"
+perl "%TC%" --model "%model_dir%\truecase-model.%trg%" < "%data_dir%\norm_tok.%trg%" > "%data_dir%\norm_tok_true.%trg%"
 
-del /F /Q "%data_dir%\norm_tok.en"
-del /F /Q "%data_dir%\norm_tok.no"
+echo TRANING AND TRUECASING...
+perl "%TRAIN_TC%" --model "%model_dir%\truecase-model.%src%" --corpus "%data_dir%\norm_tok.%src%"
+perl "%TC%" --model "%model_dir%\truecase-model.%src%" < "%data_dir%\norm_tok.%src%" > "%data_dir%\norm_tok_true.%src%"
+
+del /F /Q "%data_dir%\norm_tok.%trg%"
+del /F /Q "%data_dir%\norm_tok.%src%"
+
 
 REM Run Python commands
 echo TRAINING BPE TOKENIZER...
-python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.en" -s 8000 -o "%model_dir%\bpecode.en" --write-vocabulary "%model_dir%\voc.en"
-python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.en" --vocabulary "%model_dir%\voc.en" < "%data_dir%\norm_tok_true.en" > "%data_dir%\norm_tok_true_bpe.en"
+python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.%trg%" -s 8000 -o "%model_dir%\bpecode.%trg%" --write-vocabulary "%model_dir%\voc.%trg%"
+python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.%trg%" --vocabulary "%model_dir%\voc.%trg%" < "%data_dir%\norm_tok_true.%trg%" > "%data_dir%\norm_tok_true_bpe.%trg%"
 
-python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.no" -s 8000 -o "%model_dir%\bpecode.no" --write-vocabulary "%model_dir%\voc.no"
-python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.no" --vocabulary "%model_dir%\voc.no" < "%data_dir%\norm_tok_true.no" > "%data_dir%\norm_tok_true_bpe.no"
+python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.%src%" -s 8000 -o "%model_dir%\bpecode.%src%" --write-vocabulary "%model_dir%\voc.%src%"
+python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.%src%" --vocabulary "%model_dir%\voc.%src%" < "%data_dir%\norm_tok_true.%src%" > "%data_dir%\norm_tok_true_bpe.%src%"
 
-del /F /Q "%data_dir%\norm_tok_true.en"
-del /F /Q "%data_dir%\norm_tok_true.no"
+del /F /Q "%data_dir%\norm_tok_true.%trg%"
+del /F /Q "%data_dir%\norm_tok_true.%src%"
 
-del /F /Q "%data_dir%\truecase-model.en"
-del /F /Q "%data_dir%\truecase-model.no"
+del /F /Q "%model_dir%\truecase-model.%trg%"
+del /F /Q "%model_dir%\truecase-model.%src%"
 
 REM Rename or move the files
-move "%model_dir%\norm_tok_true_bpe.en" "%data_dir%\toclean.en"
-move "%data_dir%\norm_tok_true_bpe.no" "%data_dir%\toclean.no"
+move "%data_dir%\norm_tok_true_bpe.%trg%" "%data_dir%\toclean.%trg%"
+move "%data_dir%\norm_tok_true_bpe.%src%" "%data_dir%\toclean.%src%"
 
 REM Clean the files using the CLEAN script
-perl "%CLEAN%" "%data_dir%\toclean" "no" "en" "%data_dir%\clean" 1 128
+perl "%CLEAN%" "%data_dir%\toclean" "%src%" "%trg%" "%data_dir%\clean" 1 126
 
-del /F /Q "%data_dir%\toclean.en"
-del /F /Q "%data_dir%\toclean.no"
+del /F /Q "%data_dir%\toclean.%trg%"
+del /F /Q "%data_dir%\toclean.%src%"
 
-del /F /Q "%model_dir%\bpecode.en"
-del /F /Q "%model_dir%\bpecode.no"
+del /F /Q "%model_dir%\bpecode.%trg%"
+del /F /Q "%model_dir%\bpecode.%src%"
