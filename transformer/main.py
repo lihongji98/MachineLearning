@@ -3,13 +3,13 @@ from config import TrainingConfig, ModelConfig, LogConfig
 
 if __name__ == "__main__":
     train_config = TrainingConfig(batch_size=128,
-                                  epochs=20,
-                                  warmup_epochs=1,
+                                  epochs=100,
+                                  warmup_epochs=5,
                                   base_learning_rate=1e-10,
                                   max_learning_rate=3e-4,
                                   end_learning_rate=1e-10,
                                   label_smoothing=0.1,
-                                  load_checkpoint=True)
+                                  load_checkpoint=False)
     model_config = ModelConfig(src_vocab_num=7000,
                                trg_vocab_num=7000,
                                max_len=128,

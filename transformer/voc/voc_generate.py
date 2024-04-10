@@ -29,4 +29,4 @@ def voc_generate(lang):
 
 if __name__ == "__main__":
     voc_generate("en")
-    voc_generate("de")
+    voc_generate("no")

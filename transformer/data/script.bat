@@ -6,7 +6,7 @@ choice /c yn /m "Enter Y or N"
 if errorlevel 2 goto :eof
 
 REM Define lang
-set "src=de"
+set "src=no"
 set "trg=en"
 
 REM Define paths

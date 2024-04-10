@@ -16,10 +16,10 @@ from config import TrainingConfig, ModelConfig, LogConfig
 
 def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_config: LogConfig):
     voc_trg = generate_voc_buffer("en")
-    voc_src = generate_voc_buffer("de")
+    voc_src = generate_voc_buffer("no")
     reversed_trg_dict = {v: k for k, v in voc_trg.items()}
 
-    train_src, test_src, train_trg, test_trg = get_data_loader("./data/clean.de", "./data/clean.en", voc_src, voc_trg)
+    train_src, test_src, train_trg, test_trg = get_data_loader("./data/clean.no", "./data/clean.en", voc_src, voc_trg)
     train_dataset = PairDataset(train_src, train_trg)
     test_dataset = PairDataset(test_src, test_trg)
 

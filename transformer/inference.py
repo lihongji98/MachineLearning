@@ -8,7 +8,7 @@ def beam_search_decoder(model, src, start_token=1, end_token=2, beam_width=5, ma
     with torch.no_grad():
         beam = [(torch.tensor([start_token]), 0)]
 
-        src_voc = generate_voc_buffer("de")
+        src_voc = generate_voc_buffer("no")
         src_tokens = [[src_voc.get(src[i], src_voc["<unk>"]) for i in range(len(src))]]
         infer_dataset = PairDataset(src_tokens, [[]])
         infer_data_loader = DataLoader(infer_dataset, batch_size=1)
@@ -36,5 +36,5 @@ def beam_search_decoder(model, src, start_token=1, end_token=2, beam_width=5, ma
     return beam[0][0]
 
 
-src_example = "nun , warum spielt das eine Rolle für die menschliche Gesundheit ?".split(" ")
-trg_example = "now why does that matter for human health ?".split(" ")
+src_example = "og Gud Herren tok mennesket og satte ham i Edens have til å dyrke og vokte den .".split(" ")
+trg_example = "Yahweh God took the man , and put him into the garden of Eden to dress it and to keep it .".split(" ")

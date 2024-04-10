@@ -67,7 +67,7 @@ def get_data_loader(src_path, trg_path, src_voc, trg_voc):
             trg_ids.append(token_ids)
     print("Target DataLoader is ready...")
 
-    src_train, src_test, trg_train, trg_test = train_test_split(src_ids, trg_ids, test_size=0.3, random_state=42)
+    src_train, src_test, trg_train, trg_test = train_test_split(src_ids, trg_ids, test_size=0.1, random_state=42)
 
     return src_train, src_test, trg_train, trg_test
 
