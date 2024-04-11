@@ -47,7 +47,7 @@ def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration
     return current_lr / base_lr
 
 
-def get_data_loader(src_path, trg_path, src_voc, trg_voc):
+def get_data_loader(src_path, trg_path, src_voc, trg_voc, train_per=0.9):
     src_ids = []
     trg_ids = []
 
@@ -67,7 +67,7 @@ def get_data_loader(src_path, trg_path, src_voc, trg_voc):
             trg_ids.append(token_ids)
     print("Target DataLoader is ready...")
 
-    src_train, src_test, trg_train, trg_test = train_test_split(src_ids, trg_ids, test_size=0.1, random_state=42)
+    src_train, src_test, trg_train, trg_test = train_test_split(src_ids, trg_ids, test_size=1-train_per, random_state=42)
 
     return src_train, src_test, trg_train, trg_test
 
@@ -100,6 +100,14 @@ def model_save(model, optimizer, lr_scheduler, test_loss, best_loss, epoch, epoc
                    f'./parameters/checkpoint_{epoch}.pth')
 
     return best_loss
+
+
+def model_save_iteration(model, optimizer, lr_scheduler, current_iteration):
+    torch.save({'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': lr_scheduler.state_dict()},
+               f'./parameters/iteration_{current_iteration}_checkpoint.pth')
+    tqdm.write(f"model is saved at iteration {current_iteration}...")
 
 
 def plot_train_test_epoch_loss(train_losses, test_losses):

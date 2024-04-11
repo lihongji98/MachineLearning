@@ -15,13 +15,11 @@ class Transformer(nn.Module):
         super().__init__()
         assert embedding_dim == qkv_dim * head_dim, f"{embedding_dim, qkv_dim, head_dim}"
 
-        self.max_len = max_len
         self.device = device
-
         self.encoder = Encoder(src_vocab_size=src_vocab_num, x_dim=embedding_dim, stack_num=stack_num, ffn_dim=ffn_dim, qkv_dim=qkv_dim,
-                               head_dim=head_dim)
+                               head_dim=head_dim, max_len=max_len, device=device)
         self.decoder = Decoder(trg_vocab_size=trg_vocab_num, x_dim=embedding_dim, stack_num=stack_num, ffn_dim=ffn_dim, qkv_dim=qkv_dim,
-                               head_dim=head_dim)
+                               head_dim=head_dim, max_len=max_len, device=device)
 
         self.ffn_nn = nn.Linear(embedding_dim, trg_vocab_num)
 

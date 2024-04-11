@@ -8,7 +8,7 @@ from torch.optim.lr_scheduler import LambdaLR
 from models.model import Transformer
 from utils import (PairDataset,
                    warmup_decay_learningrate, get_data_loader, generate_voc_buffer,
-                   model_save, plot_train_test_epoch_loss, plot_train_test_iteration_loss)
+                   model_save, model_save_iteration, plot_train_test_epoch_loss, plot_train_test_iteration_loss)
 from inference import beam_search_decoder, src_example, trg_example
 from tqdm import tqdm
 from config import TrainingConfig, ModelConfig, LogConfig
@@ -19,7 +19,7 @@ def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_
     voc_src = generate_voc_buffer("no", model_config.src_vocab_num)
     reversed_trg_dict = {v: k for k, v in voc_trg.items()}
 
-    train_src, test_src, train_trg, test_trg = get_data_loader("./data/clean.no", "./data/clean.en", voc_src, voc_trg)
+    train_src, test_src, train_trg, test_trg = get_data_loader("./data/clean.no", "./data/clean.en", voc_src, voc_trg, train_per=0.1)
     train_dataset = PairDataset(train_src, train_trg)
     test_dataset = PairDataset(test_src, test_trg)
 
@@ -46,9 +46,10 @@ def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_
                                                                                      training_config.end_learning_rate))
 
     if training_config.load_checkpoint:
-        checkpoint = torch.load(r"D:\pycharm_projects\MachineLearning\transformer\parameters\best_checkpoint.pth")
+        checkpoint = torch.load(training_config.model_path)
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        lr_scheduler.load_state_dict(checkpoint['lr_scheduler_state_dict'])
 
     trg_pad_idx = voc_trg.get("<pad>", 0)
     criterion = nn.CrossEntropyLoss(ignore_index=trg_pad_idx, label_smoothing=0.1)
@@ -82,7 +83,7 @@ def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_
             loss.backward()
             optimizer.step()
             lr_scheduler.step()
-            current_iteration += 1
+
             train_iteration_loss += loss.item()
 
             train_avg_loss = train_iteration_loss / (index + 1)
@@ -97,6 +98,10 @@ def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_
                 with open(train_iteration_log_path, 'a') as train_iteration_log:
                     train_iteration_log.write(f'iteration: {index + 1}, loss: {loss.item()}\n')
             train_iteration_losses.append(loss.item())
+
+            current_iteration += 1
+            if current_iteration % log_config.save_iteration_model == 0:
+                model_save_iteration(model, optimizer, lr_scheduler, current_iteration)
 
         train_loss = train_iteration_loss / len(train_data_loader)
         train_losses.append(train_loss)

@@ -11,6 +11,7 @@ class TrainingConfig:
     warmup_epochs: int = 1
     label_smoothing: float = 0.1
     load_checkpoint: bool = True
+    model_path: str = ""
 
 
 @dataclass
@@ -32,4 +33,5 @@ class LogConfig:
     test_iteration_log: bool = False
     plot_fig: bool = True
     save_epoch_model: int = 3
+    save_iteration_model: int = 15000
     sentence_demonstration: bool = True

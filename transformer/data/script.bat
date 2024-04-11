@@ -10,7 +10,7 @@ set "src=no"
 set "trg=en"
 
 REM Define vocabulary size
-set "vocab_size=16000"
+set "vocab_size=8000"
 
 REM Define paths
 set "SCRIPTS=D:\nmt\mosesdecoder\scripts"

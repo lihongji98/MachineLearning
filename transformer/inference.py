@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 from utils import generate_voc_buffer, PairDataset
 
 
-def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam_width=5, max_length=128, device="cuda"):
+def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam_width=10, max_length=128, device="cuda"):
     with torch.no_grad():
         beam = [(torch.tensor([start_token]), 0)]
 
@@ -36,5 +36,5 @@ def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam
     return beam[0][0]
 
 
-src_example = "på samme måte som at alle levende vesener må forandre og utvikle seg kan ikke me@@ y@@ er@@ ismen forbli sta@@ tisk .".split(" ")
-trg_example = "- In the way that all living things must change and evol@@ ve , Me@@ y@@ er@@ ism itself cannot remain static .".split(" ")
+src_example = "men det fungerer bare når man tror . for når du trekker i den tråden forvand@@ les det til ingenting rett i hendene dine .".split(" ")
+trg_example = "but it only works when you believe , because once you pull that thread , it just turns into nothing right in your hands .".split(" ")

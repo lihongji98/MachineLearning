@@ -5,14 +5,11 @@ from .positional_encoding import PositionalEncoding
 
 class Encoder(nn.Module):
     def __init__(self, src_vocab_size, x_dim=512, stack_num=6, ffn_dim=2048,
-                 qkv_dim=64, head_dim=8, x_len=128, dropout=0.1):
+                 qkv_dim=64, head_dim=8, max_len=128, dropout=0.1, device="cuda"):
         super().__init__()
-        self.input_dim = x_dim
-        self.x_len = x_len
-        self.stack_num = stack_num
 
-        self.word_embedding = nn.Embedding(src_vocab_size, self.input_dim)
-        self.position_embedding = PositionalEncoding(self.input_dim, self.x_len)
+        self.word_embedding = nn.Embedding(src_vocab_size, x_dim)
+        self.position_embedding = PositionalEncoding(x_dim, max_len, device)
 
         self.layer_stack = nn.ModuleList(
             [EncoderLayer(x_dim=x_dim, ffn_dim=ffn_dim, qkv_dim=qkv_dim, head_dim=head_dim)
@@ -20,7 +17,9 @@ class Encoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, mask=None):
-        x = self.dropout(self.word_embedding(x) + self.position_embedding(x))
+        word_embedding = self.word_embedding(x)
+        position_embedding = self.position_embedding(x)
+        x = self.dropout(word_embedding + position_embedding)
         for layer in self.layer_stack:
             x = layer(x, x, x, mask=mask)
 
