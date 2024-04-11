@@ -9,6 +9,9 @@ REM Define lang
 set "src=no"
 set "trg=en"
 
+REM Define vocabulary size
+set "vocab_size=16000"
+
 REM Define paths
 set "SCRIPTS=D:\nmt\mosesdecoder\scripts"
 set "BPEROOT=D:\nmt\subword-nmt\subword_nmt"
@@ -26,12 +29,12 @@ set "CLEAN=%SCRIPTS%\training\clean-corpus-n.perl"
 
 REM Run Perl commands
 echo NORM_PUNCTUALIZING...
-perl "%NORM_PUNC%" -l %trg% < "%data_dir%\raw.%src%" > "%data_dir%\norm.%src%"
-perl "%NORM_PUNC%" -l %src% < "%data_dir%\raw.%trg%" > "%data_dir%\norm.%trg%"
+perl "%NORM_PUNC%" -l %src% < "%data_dir%\raw.%src%" > "%data_dir%\norm.%src%"
+perl "%NORM_PUNC%" -l %trg% < "%data_dir%\raw.%trg%" > "%data_dir%\norm.%trg%"
 
 echo TOKENIZING...
-perl "%TOKENIZER%" -l %trg% < "%data_dir%\norm.%src%" > "%data_dir%\norm_tok.%src%"
-perl "%TOKENIZER%" -l %src% < "%data_dir%\norm.%trg%" > "%data_dir%\norm_tok.%trg%"
+perl "%TOKENIZER%" -l %src% < "%data_dir%\norm.%src%" > "%data_dir%\norm_tok.%src%"
+perl "%TOKENIZER%" -l %trg% < "%data_dir%\norm.%trg%" > "%data_dir%\norm_tok.%trg%"
 
 del /F /Q "%data_dir%\norm.%trg%"
 del /F /Q "%data_dir%\norm.%src%"
@@ -50,10 +53,10 @@ del /F /Q "%data_dir%\norm_tok.%src%"
 
 REM Run Python commands
 echo TRAINING BPE TOKENIZER...
-python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.%trg%" -s 8000 -o "%model_dir%\bpecode.%trg%" --write-vocabulary "%model_dir%\voc.%trg%"
+python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.%trg%" -s %vocab_size% -o "%model_dir%\bpecode.%trg%" --write-vocabulary "%model_dir%\voc.%trg%"
 python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.%trg%" --vocabulary "%model_dir%\voc.%trg%" < "%data_dir%\norm_tok_true.%trg%" > "%data_dir%\norm_tok_true_bpe.%trg%"
 
-python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.%src%" -s 8000 -o "%model_dir%\bpecode.%src%" --write-vocabulary "%model_dir%\voc.%src%"
+python "%BPEROOT%\learn_joint_bpe_and_vocab.py" --input "%data_dir%\norm_tok_true.%src%" -s %vocab_size% -o "%model_dir%\bpecode.%src%" --write-vocabulary "%model_dir%\voc.%src%"
 python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.%src%" --vocabulary "%model_dir%\voc.%src%" < "%data_dir%\norm_tok_true.%src%" > "%data_dir%\norm_tok_true_bpe.%src%"
 
 del /F /Q "%data_dir%\norm_tok_true.%trg%"

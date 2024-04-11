@@ -15,8 +15,8 @@ from config import TrainingConfig, ModelConfig, LogConfig
 
 
 def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_config: LogConfig):
-    voc_trg = generate_voc_buffer("en")
-    voc_src = generate_voc_buffer("no")
+    voc_trg = generate_voc_buffer("en", model_config.trg_vocab_num)
+    voc_src = generate_voc_buffer("no", model_config.src_vocab_num)
     reversed_trg_dict = {v: k for k, v in voc_trg.items()}
 
     train_src, test_src, train_trg, test_trg = get_data_loader("./data/clean.no", "./data/clean.en", voc_src, voc_trg)
@@ -140,7 +140,7 @@ def start_train(training_config: TrainingConfig, model_config: ModelConfig, log_
                                log_config.save_epoch_model)
 
         if log_config.sentence_demonstration:
-            predicting_sentence = beam_search_decoder(model, src_example, device=device).cpu().numpy()
+            predicting_sentence = beam_search_decoder(model, src_example, device=device, vocab_size=model_config.trg_vocab_num).cpu().numpy()
             predicting_sentence = [reversed_trg_dict.get(predicting_sentence[i], "<unk>") for i in
                                    range(len(predicting_sentence))][1:-1]
             with open(sentence_demonstration_path, 'a') as sentence_log:

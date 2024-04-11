@@ -72,12 +72,12 @@ def get_data_loader(src_path, trg_path, src_voc, trg_voc):
     return src_train, src_test, trg_train, trg_test
 
 
-def generate_voc_buffer(lang):
+def generate_voc_buffer(lang, vocab_size):
     vocab_table = defaultdict(lambda: len(vocab_table))
     vocab_table.default_factory = vocab_table.__len__
 
     with open(f'voc/voc_{lang}.txt', 'r', encoding='utf-8') as f:
-        for line in islice(f, 7000):
+        for line in islice(f, vocab_size):
             token, index_str = line.strip().split()
             vocab_table[token] = int(index_str)
 
