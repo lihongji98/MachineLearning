@@ -1,15 +1,15 @@
 import lxml.etree as ET
 
 # Load the TMX file
-tree = ET.parse('en-no')
+tree = ET.parse('en-no.tmx')
 root = tree.getroot()
 
 # Create a namespace map
 nsmap = {'xml': 'http://www.w3.org/XML/1998/namespace'}
 
 # Open output files for writing
-source_file = open('source_file.txt', 'w', encoding='utf-8')
-target_file = open('target_file.txt', 'w', encoding='utf-8')
+source_file = open('source.txt', 'w', encoding='utf-8')
+target_file = open('target.txt', 'w', encoding='utf-8')
 
 # Iterate through translation units
 for tu in root.findall('.//tu'):

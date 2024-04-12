@@ -36,15 +36,23 @@ class PairDataset(Dataset):
         return src, trg
 
 
-def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration, base_lr, max_lr, end_lr):
-    if current_iteration < warmup_iteration:
-        slope = (max_lr - base_lr) / warmup_iteration
-        current_lr = base_lr + slope * current_iteration
-    else:
-        slope = (end_lr - max_lr) / (end_iteration - warmup_iteration)
-        current_lr = max_lr + slope * (current_iteration - warmup_iteration)
+def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration, base_lr, max_lr, end_lr, x_dim, lr_decay_strategy):
+    if lr_decay_strategy == "linear_decay":
+        if current_iteration < warmup_iteration:
+            slope = (max_lr - base_lr) / warmup_iteration
+            current_lr = base_lr + slope * current_iteration
+        else:
+            slope = (end_lr - max_lr) / (end_iteration - warmup_iteration)
+            current_lr = max_lr + slope * (current_iteration - warmup_iteration)
+        return current_lr / base_lr
 
-    return current_lr / base_lr
+    elif lr_decay_strategy == "noam_decay":
+        current_lr = 1 / torch.sqrt(torch.tensor(x_dim)) * torch.minimum(1 / torch.sqrt(torch.tensor(current_iteration)),
+                                                                         torch.tensor(current_iteration / warmup_iteration ** 1.5))
+        return current_lr / base_lr
+
+    else:
+        print("input correct learning rate decay: ['linear_decay', 'noam_decay']")
 
 
 def get_data_loader(src_path, trg_path, src_voc, trg_voc, train_per=0.9):
@@ -110,7 +118,15 @@ def model_save_iteration(model, optimizer, lr_scheduler, current_iteration):
     tqdm.write(f"model is saved at iteration {current_iteration}...")
 
 
-def plot_train_test_epoch_loss(train_losses, test_losses):
+def plot_train_test_epoch_loss(loss_path='logs/training_epoch_log.txt'):
+    train_losses, test_losses = [], []
+    with open(loss_path, 'r') as file:
+        for line in file:
+            losses = line.split(', ')
+            train_loss = float(losses[1][12:])
+            test_loss = float(losses[2][11:])
+            train_losses.append(train_loss)
+            test_losses.append(test_loss)
     plt.plot([i for i in range(len(train_losses))], train_losses, label='Training Loss')
     plt.plot([i for i in range(len(test_losses))], test_losses, label='Test Loss')
     plt.xlabel('Epoch')
@@ -121,10 +137,19 @@ def plot_train_test_epoch_loss(train_losses, test_losses):
     plt.close()
 
 
-def plot_train_test_iteration_loss(train_iteration_losses):
+def plot_train_iteration_loss(iteration_loss_path='logs/train_iteration_log.txt'):
+    train_iteration_losses = []
+    with open(iteration_loss_path, 'r') as file:
+        for line in file:
+            losses = line.split(', ')
+            train_loss = float(losses[1][6:])
+            train_iteration_losses.append(train_loss)
     plt.plot([i for i in range(len(train_iteration_losses))], train_iteration_losses)
     plt.xlabel('Iteration')
     plt.ylabel('Loss')
     plt.title('iteration loss')
     plt.savefig('logs/training_iteration_loss.png')
     plt.close()
+
+
+plot_train_iteration_loss()

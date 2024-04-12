@@ -8,10 +8,12 @@ class TrainingConfig:
     end_learning_rate: float = 1e-7
     batch_size: int = 128
     epochs: int = 10
-    warmup_epochs: int = 1
+    warmup_iteration: int = 4000
+    lr_decay_strategy: str = "noam_decay"
     label_smoothing: float = 0.1
     load_checkpoint: bool = True
     model_path: str = ""
+    train_size: float = 0.9
 
 
 @dataclass
@@ -30,7 +32,6 @@ class ModelConfig:
 class LogConfig:
     epoch_log: bool = True
     train_iteration_log: bool = True
-    test_iteration_log: bool = False
     plot_fig: bool = True
     save_epoch_model: int = 3
     save_iteration_model: int = 15000

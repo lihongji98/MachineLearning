@@ -19,6 +19,7 @@ set "BPEROOT=D:\nmt\subword-nmt\subword_nmt"
 REM Define directories
 set "data_dir=D:\pycharm_projects\MachineLearning\transformer\data"
 set "model_dir=D:\pycharm_projects\MachineLearning\transformer\voc"
+set "voc_dir=D:\pycharm_projects\MachineLearning\transformer\voc"
 
 REM Define tools
 set "TOKENIZER=%SCRIPTS%\tokenizer\tokenizer.perl"
@@ -77,3 +78,8 @@ del /F /Q "%data_dir%\toclean.%src%"
 
 del /F /Q "%model_dir%\bpecode.%trg%"
 del /F /Q "%model_dir%\bpecode.%src%"
+
+python "%voc_dir%\voc_generate.py" --src %src% --trg %trg%
+
+del /F /Q "%voc_dir%\voc.%trg%"
+del /F /Q "%voc_dir%\voc.%src%"
