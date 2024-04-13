@@ -150,6 +150,3 @@ def plot_train_iteration_loss(iteration_loss_path='logs/train_iteration_log.txt'
     plt.title('iteration loss')
     plt.savefig('logs/training_iteration_loss.png')
     plt.close()
-
-
-plot_train_iteration_loss()
