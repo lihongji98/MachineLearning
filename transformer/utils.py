@@ -36,7 +36,8 @@ class PairDataset(Dataset):
         return src, trg
 
 
-def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration, base_lr, max_lr, end_lr, x_dim, lr_decay_strategy):
+def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration, base_lr, max_lr, end_lr, x_dim,
+                              lr_decay_strategy):
     if lr_decay_strategy == "linear_decay":
         if current_iteration < warmup_iteration:
             slope = (max_lr - base_lr) / warmup_iteration
@@ -47,8 +48,9 @@ def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration
         return current_lr / base_lr
 
     elif lr_decay_strategy == "noam_decay":
-        current_lr = 1 / torch.sqrt(torch.tensor(x_dim)) * torch.minimum(1 / torch.sqrt(torch.tensor(current_iteration)),
-                                                                         torch.tensor(current_iteration / warmup_iteration ** 1.5))
+        current_lr = 1 / torch.sqrt(torch.tensor(x_dim)) * torch.minimum(
+            1 / torch.sqrt(torch.tensor(current_iteration)),
+            torch.tensor(current_iteration / warmup_iteration ** 1.5))
         return current_lr / base_lr
 
     else:
@@ -75,7 +77,8 @@ def get_data_loader(src_path, trg_path, src_voc, trg_voc, train_per=0.9):
             trg_ids.append(token_ids)
     print("Target DataLoader is ready...")
 
-    src_train, src_test, trg_train, trg_test = train_test_split(src_ids, trg_ids, test_size=1-train_per, random_state=42)
+    src_train, src_test, trg_train, trg_test = train_test_split(src_ids, trg_ids, test_size=1 - train_per,
+                                                                random_state=42)
 
     return src_train, src_test, trg_train, trg_test
 
@@ -118,6 +121,17 @@ def model_save_iteration(model, optimizer, lr_scheduler, current_iteration):
     tqdm.write(f"model is saved at iteration {current_iteration}...")
 
 
+def glue_tokens_to_sentence(predicted_sentence):
+    return_sentence = ""
+    for token in predicted_sentence:
+        if token[-2:] != "@@":
+            return_sentence += token + " "
+        else:
+            return_sentence += token[:-2]
+
+    return return_sentence
+
+
 def plot_train_test_epoch_loss(loss_path='logs/training_epoch_log.txt'):
     train_losses, test_losses = [], []
     with open(loss_path, 'r') as file:
@@ -150,3 +164,7 @@ def plot_train_iteration_loss(iteration_loss_path='logs/train_iteration_log.txt'
     plt.title('iteration loss')
     plt.savefig('logs/training_iteration_loss.png')
     plt.close()
+
+
+# plot_train_iteration_loss()
+# plot_train_test_epoch_loss()

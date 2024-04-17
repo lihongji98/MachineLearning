@@ -10,7 +10,7 @@ set "src=no"
 set "trg=en"
 
 REM Define vocabulary size
-set "vocab_size=8000"
+set "vocab_size=16000"
 
 REM Define paths
 set "SCRIPTS=D:\nmt\mosesdecoder\scripts"
@@ -63,9 +63,6 @@ python "%BPEROOT%\apply_bpe.py" -c "%model_dir%\bpecode.%src%" --vocabulary "%mo
 del /F /Q "%data_dir%\norm_tok_true.%trg%"
 del /F /Q "%data_dir%\norm_tok_true.%src%"
 
-del /F /Q "%model_dir%\truecase-model.%trg%"
-del /F /Q "%model_dir%\truecase-model.%src%"
-
 REM Rename or move the files
 move "%data_dir%\norm_tok_true_bpe.%trg%" "%data_dir%\toclean.%trg%"
 move "%data_dir%\norm_tok_true_bpe.%src%" "%data_dir%\toclean.%src%"
@@ -75,9 +72,6 @@ perl "%CLEAN%" "%data_dir%\toclean" "%src%" "%trg%" "%data_dir%\clean" 1 126
 
 del /F /Q "%data_dir%\toclean.%trg%"
 del /F /Q "%data_dir%\toclean.%src%"
-
-del /F /Q "%model_dir%\bpecode.%trg%"
-del /F /Q "%model_dir%\bpecode.%src%"
 
 python "%voc_dir%\voc_generate.py" --src %src% --trg %trg%
 

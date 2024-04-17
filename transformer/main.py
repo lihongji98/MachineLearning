@@ -14,14 +14,14 @@ train_config = TrainingConfig(batch_size=128,
                               end_learning_rate=1e-7,
                               lr_decay_strategy="noam_decay",
                               label_smoothing=0.1,
-                              load_checkpoint=False,
-                              model_path="",
+                              load_checkpoint=True,
+                              model_path="./parameters/best_3.24_checkpoint.pth",
                               train_size=0.9)
 model_config = ModelConfig(src_vocab_num=16000,
                            trg_vocab_num=16000,
                            max_len=128,
                            embedding_dim=512,
-                           stack_num=6,
+                           stack_num=4,
                            qkv_dim=64,
                            ffn_dim=2048,
                            head_dim=8)
@@ -29,7 +29,7 @@ log_config = LogConfig(epoch_log=True,
                        train_iteration_log=True,
                        plot_fig=False,
                        save_epoch_model=1,
-                       save_iteration_model=5022,
+                       save_iteration_model=10000,
                        sentence_demonstration=True)
 
 
@@ -46,7 +46,7 @@ def shutdown_timer(timer_duration):
 if __name__ == "__main__":
     current_time = time.time()
     current_datetime = datetime.datetime.fromtimestamp(current_time)
-    shutdown_time = datetime.datetime(2024, 4, 13, 3, 47, 0)
+    shutdown_time = datetime.datetime(2024, 4, 17, 10, 45, 0)
 
     if current_datetime < shutdown_time:
         run_time = (shutdown_time - current_datetime).total_seconds()
