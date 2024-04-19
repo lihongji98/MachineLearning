@@ -12,3 +12,8 @@ epoch: 2   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'think', ',
 epoch: 0   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'believe', ',', 'because', 'when', 'you', 'pull', 'that', 'wire', ',', 'it', 'turns', 'to', 'nothing', 'right', 'in', 'your', 'hands']
 epoch: 1   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'think', ',', 'because', 'when', 'you', 'pull', 'that', 'thread', ',', 'it', 'turns', 'into', 'nothing', 'right', 'in', 'your', 'hands']
 epoch: 2   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'think', ',', 'because', 'when', 'you', 'pull', 'that', 'thread', ',', 'it', 'turns', 'into', 'nothing', 'right', 'in', 'your', 'hands']
+original__ sentence: ['men', 'det', 'fungerer', 'bare', 'når', 'man', 'tror', '.', 'for', 'når', 'du', 'trekker', 'i', 'den', 'tråden', 'forvand@@', 'les', 'det', 'til', 'ingenting', 'rett', 'i', 'hendene', 'dine', '.']
+translated sentence: ['but', 'it', 'only', 'works', 'when', 'you', 'believe', ',', 'because', 'once', 'you', 'pull', 'that', 'thread', ',', 'it', 'just', 'turns', 'into', 'nothing', 'right', 'in', 'your', 'hands', '.']
+epoch: 0   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'think', ',', 'because', 'when', 'you', 'pull', 'that', 'thread', ',', 'nothing', 'goes', 'right', 'into', 'your', 'hands']
+epoch: 1   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'think', ',', 'because', 'when', 'you', 'pull', 'that', 'wire', ',', 'it', 'turns', 'to', 'nothing', 'right', 'in', 'your', 'hands']
+epoch: 2   predicting: ['but', 'it', 'only', 'works', 'when', 'you', 'believe', ',', 'because', 'when', 'you', 'pull', 'that', 'wire', ',', 'it', 'turns', 'to', 'nothing', 'right', 'in', 'your', 'hands']

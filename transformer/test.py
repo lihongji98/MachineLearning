@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 import torch
 
@@ -7,6 +8,9 @@ from transformer.models.model import Transformer
 from transformer.utils import generate_voc_buffer, glue_tokens_to_sentence
 
 import subprocess
+
+
+end_symbols: List[str] = []
 
 
 def preprocess_string():
@@ -31,10 +35,13 @@ def post_process_string():
 
 
 def preprocess(src_sentence):
+    global end_symbols
     src_sentence = re.findall(r'[^.!?]+[.!?]?', src_sentence)
     src_sentence = [s.strip() for s in src_sentence if s.strip()]
+
     with open("infer.no", "w", encoding="UTF-8") as _file:
         for s in src_sentence:
+            end_symbols.append(s[-1])
             if s != "":
                 _file.write(s)
                 _file.write("\n")
@@ -51,6 +58,7 @@ def preprocess(src_sentence):
 
 
 def post_process(_predicting_sentence):
+    global end_symbols
     with open("infer.no", "w", encoding="UTF-8") as file:
         for line in _predicting_sentence:
             file.write(line)
@@ -61,7 +69,10 @@ def post_process(_predicting_sentence):
 
     with open("infer.no", "r", encoding="UTF-8") as file:
         lines = [line.rstrip() for line in file]
-        lines = [line + '.' for line in lines if not re.search(r'[.!?]$', line) and re.search(r'\w+$', line)]
+        # lines = [line + '.' for line in lines if not re.search(r'[.!?]$', line) and re.search(r'\w+$', line)]
+        for i in range(len(lines)):
+            if not re.search(r'[.!?]$', line) and re.search(r'\w+$', lines[i]):
+                lines[i] += end_symbols[i]
 
     delete_infer_buffer()
 
@@ -71,23 +82,22 @@ def post_process(_predicting_sentence):
 
 
 if __name__ == "__main__":
-    src_example = "Etterpå er det mange som spiser risgrøt og man gjemmer en mandel i risgrøten. Den som får mandelen vinner en liten premie."
+    src_example = "Da har jeg reservert et dobbeltrom med to enkeltsenger med utsikt mot hagen fra fredag til søndag neste helg under navnet Hanne Nilsen."
     lines_to_translate = preprocess(src_example)
 
     voc_trg = generate_voc_buffer("en", 16000)
-    voc_src = generate_voc_buffer("no", 16000)
     reversed_trg_dict = {v: k for k, v in voc_trg.items()}
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = Transformer(src_vocab_num=16000, trg_vocab_num=16000, max_len=128, embedding_dim=512, stack_num=4, ffn_dim=2048, qkv_dim=64, head_dim=8, device=device).to(device)
-    checkpoint = torch.load(r"D:\pycharm_projects\MachineLearning\transformer\parameters\best_checkpoint.pth")
+    checkpoint = torch.load(r"D:\pycharm_projects\MachineLearning\transformer\parameters\best_3.12_checkpoint.pth")
     model.load_state_dict(checkpoint['model_state_dict'])
 
     predicting_sentences = []
     for line_to_translate in lines_to_translate:
         model.eval()
         with torch.no_grad():
-            predicting_sentence = beam_search_decoder(model, line_to_translate, device=device, beam_width=10, vocab_size=16000).cpu().numpy()
+            predicting_sentence = beam_search_decoder(model, line_to_translate, device=device, beam_width=2, vocab_size=16000).cpu().numpy()
             predicting_sentence = [reversed_trg_dict.get(predicting_sentence[i], "<unk>") for i in range(len(predicting_sentence))][1:-1]
         predicting_sentence = glue_tokens_to_sentence(predicting_sentence)
 

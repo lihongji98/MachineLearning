@@ -14,6 +14,7 @@ def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam
         infer_data_loader = DataLoader(infer_dataset, batch_size=1)
         source, _ = next(iter(infer_data_loader))
         source = source.to(device)
+        print(source)
 
         for _ in range(max_length):
             new_beam = []
@@ -32,7 +33,7 @@ def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam
 
             new_beam.sort(key=lambda x: x[1], reverse=True)
             beam = new_beam[:beam_width]
-
+        print(beam[0][0])
     return beam[0][0]
 
 
