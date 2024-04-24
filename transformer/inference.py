@@ -10,12 +10,11 @@ def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam
 
         src_voc = generate_voc_buffer("no", vocab_size)
         src_tokens = [[src_voc.get(src[i], src_voc["<unk>"]) for i in range(len(src))]]
+
         infer_dataset = PairDataset(src_tokens, [[]])
         infer_data_loader = DataLoader(infer_dataset, batch_size=1)
         source, _ = next(iter(infer_data_loader))
         source = source.to(device)
-        print(source)
-
         for _ in range(max_length):
             new_beam = []
             for sequence, score in beam:
@@ -24,8 +23,10 @@ def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam
                     continue
                 sequence = sequence.to(device)
                 target = sequence.unsqueeze(0).to(device)
+
                 next_token_probs = torch.softmax(model(source, target), dim=-1)[:, -1, :].flatten()
                 top_tokens = torch.argsort(next_token_probs)[-beam_width:]
+
                 for token in top_tokens:
                     new_sequence = torch.cat((sequence, token.unsqueeze(0)), dim=0)
                     new_score = score + torch.log(next_token_probs[token])
@@ -33,7 +34,7 @@ def beam_search_decoder(model, src, vocab_size, start_token=1, end_token=2, beam
 
             new_beam.sort(key=lambda x: x[1], reverse=True)
             beam = new_beam[:beam_width]
-        print(beam[0][0])
+
     return beam[0][0]
 
 

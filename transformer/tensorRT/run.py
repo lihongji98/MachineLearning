@@ -150,4 +150,5 @@ if __name__ == "__main__":
 
         if inputs["decoder_input"][0][-1] == 2:
             break
+
     print(inputs["decoder_input"])

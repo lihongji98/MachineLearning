@@ -15,7 +15,7 @@ train_config = TrainingConfig(batch_size=128,
                               lr_decay_strategy="noam_decay",
                               label_smoothing=0.1,
                               load_checkpoint=True,
-                              model_path="./parameters/best_3.14_checkpoint.pth",
+                              model_path="./parameters/best_3.12_checkpoint.pth",
                               train_size=0.9)
 model_config = ModelConfig(src_vocab_num=16000,
                            trg_vocab_num=16000,
@@ -46,7 +46,7 @@ def shutdown_timer(timer_duration):
 if __name__ == "__main__":
     current_time = time.time()
     current_datetime = datetime.datetime.fromtimestamp(current_time)
-    shutdown_time = datetime.datetime(2024, 4, 18, 10, 45, 0)
+    shutdown_time = datetime.datetime(2024, 4, 19, 10, 0 , 0)
 
     if current_datetime < shutdown_time:
         run_time = (shutdown_time - current_datetime).total_seconds()

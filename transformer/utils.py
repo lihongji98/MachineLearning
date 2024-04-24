@@ -38,6 +38,9 @@ class PairDataset(Dataset):
 
 def warmup_decay_learningrate(current_iteration, warmup_iteration, end_iteration, base_lr, max_lr, end_lr, x_dim,
                               lr_decay_strategy):
+    """
+    :param lr_decay_strategy: "linear_decay" or "noam_decay"
+    """
     if lr_decay_strategy == "linear_decay":
         if current_iteration < warmup_iteration:
             slope = (max_lr - base_lr) / warmup_iteration
