@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     tokenizer = transformers.BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
-    train_sentences, teva_sentences, train_tag, teva_tag = train_test_split(sentences, tag, test_size=0.3)
+    train_sentences, teva_sentences, train_tag, teva_tag = train_test_split(sentences, tag, test_size=0.1)
     test_sentences, valid_sentences, test_tag, valid_tag = train_test_split(teva_sentences, teva_tag, test_size=0.5)
 
     test_dataset = EntityDataset(texts=test_sentences, tags=test_tag, tokenizer=tokenizer)
@@ -22,11 +22,9 @@ if __name__ == "__main__":
 
     device = torch.device("cuda")
     model = NER_Recognizer(num_tag=num_tag)
-    model.load_state_dict(torch.load('parameter/ner_bert_lstm_crf.pth'))
+    model.load_state_dict(torch.load('parameter/nerc_best_checkpoint.pth'))
     model.to(device)
 
-    # for data in test_data_loader:
-    #     print(data["target_tag"])
     model.eval()
 
     y_labels = []
@@ -44,10 +42,11 @@ if __name__ == "__main__":
             temp = []
             for j in range(len(mask)):
                 if mask[j] == 1:
-                    temp.append(target[i])
+                    temp.append(target[j])
             y_labels.append(temp)
 
         y_pred = model(**data)
+
         for sentence in y_pred:
             y_preds.append(sentence)
 
@@ -60,8 +59,6 @@ if __name__ == "__main__":
         for tag in tags:
             y_pred.append(tag)
 
-    print(set(y_true))
-    print(set(y_pred))
     target_names = id_to_tag_dict.values()
-    print(len(target_names))
+
     print(classification_report(y_true, y_pred, target_names=target_names))

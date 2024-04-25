@@ -11,7 +11,7 @@ from utils import warmup_decay_learningrate
 
 if __name__ == "__main__":
     batch_size = 96
-    epochs = 10
+    epochs = 3
     device = torch.device("cuda")
 
     tokenizer = transformers.BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
@@ -34,13 +34,13 @@ if __name__ == "__main__":
     optimizer = AdamW(model.parameters(), lr=1e-10)
     lr_scheduler = LambdaLR(optimizer,
                             lr_lambda=lambda current_iter: warmup_decay_learningrate(current_iter,
-                                                                                     warmup_iteration=50,
+                                                                                     warmup_iteration=100,
                                                                                      end_iteration=end_iteration,
                                                                                      base_lr=1e-10,
-                                                                                     max_lr=3e-4,
+                                                                                     max_lr=5e-5,
                                                                                      end_lr=1e-7,
                                                                                      x_dim=768,
-                                                                                     lr_decay_strategy="noam_decay"))
+                                                                                     lr_decay_strategy="linear_decay"))
 
     best_loss = torch.inf
     for epoch in range(epochs):

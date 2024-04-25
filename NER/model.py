@@ -1,5 +1,4 @@
 import numpy as np
-import torch
 import torch.nn as nn
 import transformers
 from TorchCRF import CRF
@@ -14,13 +13,13 @@ class NER_Recognizer(nn.Module):
         self.tokenizer = transformers.BertTokenizer.from_pretrained(bert_path, do_lower_case=True)
         self.fc = nn.Linear(768, self.num_tag)
         self.lstm = nn.LSTM(768, 768 // 2, num_layers=2, bidirectional=True, batch_first=True, dropout=0.1)
-        self.crf = CRF(self.num_tag)
+        self.crf = CRF(self.num_tag, batch_first=True)
 
     def forward(self, ids, mask, token_type_ids, target_tag):
         o1, _ = self.bert(ids, attention_mask=mask, token_type_ids=token_type_ids, return_dict=False)
         seq_out, _ = self.lstm(o1)
         tag = self.fc(seq_out)
-        crf_tag = self.crf.viterbi_decode(tag, mask.bool())
+        crf_tag = self.crf.decode(tag, mask.bool())
 
         return crf_tag
 
@@ -28,7 +27,8 @@ class NER_Recognizer(nn.Module):
         o1, _ = self.bert(ids, attention_mask=mask, token_type_ids=token_type_ids, return_dict=False)
         seq_out, _ = self.lstm(o1)
         y_pred = self.fc(seq_out)
-        loss = torch.mean(-self.crf.forward(y_pred, target_tag, mask.bool()))
+        loss = -self.crf.forward(y_pred, target_tag, mask.bool(), reduction='mean')
+
         return loss
 
 
@@ -69,16 +69,3 @@ def eval_fn(data_loader, model, device):
         final_loss += loss.item()
 
     return final_loss / len(data_loader)
-
-
-def loss_fn(output, target, mask, num_labels):
-    lfn = nn.CrossEntropyLoss()
-    active_loss = mask.view(-1) == 1
-    active_logits = output.view(-1, num_labels)
-    active_labels = torch.where(
-        active_loss,
-        target.view(-1),
-        torch.tensor(lfn.ignore_index).type_as(target)
-    )
-    loss = lfn(active_logits, active_labels)
-    return loss
