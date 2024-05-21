@@ -1,0 +1,110 @@
+Number of graphs: 188
+Number of features: 7
+Number of classes: 2
+
+First graph:
+Data(edge_index=[2, 38], x=[17, 7], edge_attr=[38, 4], y=[1])
+Number of nodes: 17
+Number of edges: 38
+Number of training graphs: 150
+Number of test graphs: 38
+[Epoch 1/100] Loss: 0.7327325940132141 | Train: 0.693 | Test: 0.632
+[Epoch 2/100] Loss: 0.6867241263389587 | Train: 0.660 | Test: 0.579
+[Epoch 3/100] Loss: 0.5207564830780029 | Train: 0.673 | Test: 0.632
+[Epoch 4/100] Loss: 0.6873843669891357 | Train: 0.673 | Test: 0.632
+[Epoch 5/100] Loss: 0.5855402946472168 | Train: 0.653 | Test: 0.632
+[Epoch 6/100] Loss: 0.6595491766929626 | Train: 0.700 | Test: 0.658
+[Epoch 7/100] Loss: 0.6102520227432251 | Train: 0.707 | Test: 0.605
+[Epoch 8/100] Loss: 0.4761970639228821 | Train: 0.693 | Test: 0.658
+[Epoch 9/100] Loss: 0.46550753712654114 | Train: 0.707 | Test: 0.632
+[Epoch 10/100] Loss: 0.5500010848045349 | Train: 0.720 | Test: 0.737
+[Epoch 11/100] Loss: 0.4033079445362091 | Train: 0.720 | Test: 0.737
+[Epoch 12/100] Loss: 0.6348440647125244 | Train: 0.740 | Test: 0.684
+[Epoch 13/100] Loss: 0.4658224880695343 | Train: 0.727 | Test: 0.684
+[Epoch 14/100] Loss: 0.4499950706958771 | Train: 0.760 | Test: 0.684
+[Epoch 15/100] Loss: 0.504624605178833 | Train: 0.780 | Test: 0.737
+[Epoch 16/100] Loss: 0.5956652760505676 | Train: 0.747 | Test: 0.684
+[Epoch 17/100] Loss: 0.5592909455299377 | Train: 0.733 | Test: 0.711
+[Epoch 18/100] Loss: 0.3939949870109558 | Train: 0.720 | Test: 0.737
+[Epoch 19/100] Loss: 0.5202202200889587 | Train: 0.760 | Test: 0.711
+[Epoch 20/100] Loss: 0.38386833667755127 | Train: 0.780 | Test: 0.737
+[Epoch 21/100] Loss: 0.4661487340927124 | Train: 0.753 | Test: 0.684
+[Epoch 22/100] Loss: 0.6073836088180542 | Train: 0.747 | Test: 0.684
+[Epoch 23/100] Loss: 0.571739137172699 | Train: 0.740 | Test: 0.711
+[Epoch 24/100] Loss: 0.4828074276447296 | Train: 0.760 | Test: 0.684
+[Epoch 25/100] Loss: 0.6331901550292969 | Train: 0.767 | Test: 0.711
+[Epoch 26/100] Loss: 0.4978104829788208 | Train: 0.760 | Test: 0.711
+[Epoch 27/100] Loss: 0.5340922474861145 | Train: 0.753 | Test: 0.711
+[Epoch 28/100] Loss: 0.5103568434715271 | Train: 0.767 | Test: 0.711
+[Epoch 29/100] Loss: 0.5735237002372742 | Train: 0.767 | Test: 0.711
+[Epoch 30/100] Loss: 0.6080081462860107 | Train: 0.753 | Test: 0.711
+[Epoch 31/100] Loss: 0.5305790305137634 | Train: 0.760 | Test: 0.737
+[Epoch 32/100] Loss: 0.4287196099758148 | Train: 0.760 | Test: 0.737
+[Epoch 33/100] Loss: 0.4881969690322876 | Train: 0.767 | Test: 0.711
+[Epoch 34/100] Loss: 0.5966411828994751 | Train: 0.760 | Test: 0.711
+[Epoch 35/100] Loss: 0.5779194831848145 | Train: 0.747 | Test: 0.711
+[Epoch 36/100] Loss: 0.4275822639465332 | Train: 0.767 | Test: 0.711
+[Epoch 37/100] Loss: 0.39179137349128723 | Train: 0.780 | Test: 0.711
+[Epoch 38/100] Loss: 0.7219116687774658 | Train: 0.780 | Test: 0.711
+[Epoch 39/100] Loss: 0.3539411425590515 | Train: 0.767 | Test: 0.763
+[Epoch 40/100] Loss: 0.4700612723827362 | Train: 0.760 | Test: 0.737
+[Epoch 41/100] Loss: 0.603151261806488 | Train: 0.767 | Test: 0.737
+[Epoch 42/100] Loss: 0.4983254373073578 | Train: 0.767 | Test: 0.737
+[Epoch 43/100] Loss: 0.42164814472198486 | Train: 0.767 | Test: 0.763
+[Epoch 44/100] Loss: 0.5466033816337585 | Train: 0.773 | Test: 0.789
+[Epoch 45/100] Loss: 0.45493412017822266 | Train: 0.767 | Test: 0.763
+[Epoch 46/100] Loss: 0.5371466279029846 | Train: 0.773 | Test: 0.711
+[Epoch 47/100] Loss: 0.5412262082099915 | Train: 0.773 | Test: 0.711
+[Epoch 48/100] Loss: 0.4161911904811859 | Train: 0.767 | Test: 0.737
+[Epoch 49/100] Loss: 0.5201854705810547 | Train: 0.773 | Test: 0.763
+[Epoch 50/100] Loss: 0.48650023341178894 | Train: 0.773 | Test: 0.711
+[Epoch 51/100] Loss: 0.46422138810157776 | Train: 0.773 | Test: 0.711
+[Epoch 52/100] Loss: 0.36748477816581726 | Train: 0.773 | Test: 0.763
+[Epoch 53/100] Loss: 0.26242876052856445 | Train: 0.773 | Test: 0.763
+[Epoch 54/100] Loss: 0.4612841308116913 | Train: 0.767 | Test: 0.737
+[Epoch 55/100] Loss: 0.5163109302520752 | Train: 0.767 | Test: 0.763
+[Epoch 56/100] Loss: 0.47485095262527466 | Train: 0.760 | Test: 0.816
+[Epoch 57/100] Loss: 0.3219722807407379 | Train: 0.767 | Test: 0.816
+[Epoch 58/100] Loss: 0.31279823184013367 | Train: 0.767 | Test: 0.816
+[Epoch 59/100] Loss: 0.4106586277484894 | Train: 0.767 | Test: 0.789
+[Epoch 60/100] Loss: 0.3334340751171112 | Train: 0.773 | Test: 0.816
+[Epoch 61/100] Loss: 0.5980961322784424 | Train: 0.767 | Test: 0.789
+[Epoch 62/100] Loss: 0.5383582711219788 | Train: 0.767 | Test: 0.789
+[Epoch 63/100] Loss: 0.6147331595420837 | Train: 0.773 | Test: 0.816
+[Epoch 64/100] Loss: 0.5337262749671936 | Train: 0.767 | Test: 0.816
+[Epoch 65/100] Loss: 0.4840671420097351 | Train: 0.773 | Test: 0.789
+[Epoch 66/100] Loss: 0.2805103063583374 | Train: 0.773 | Test: 0.816
+[Epoch 67/100] Loss: 0.3934447467327118 | Train: 0.773 | Test: 0.789
+[Epoch 68/100] Loss: 0.8400430083274841 | Train: 0.780 | Test: 0.711
+[Epoch 69/100] Loss: 0.6000959277153015 | Train: 0.773 | Test: 0.789
+[Epoch 70/100] Loss: 0.3733459413051605 | Train: 0.773 | Test: 0.789
+[Epoch 71/100] Loss: 0.3512902557849884 | Train: 0.767 | Test: 0.711
+[Epoch 72/100] Loss: 0.4701748192310333 | Train: 0.767 | Test: 0.737
+[Epoch 73/100] Loss: 0.4245224893093109 | Train: 0.787 | Test: 0.789
+[Epoch 74/100] Loss: 0.33398711681365967 | Train: 0.760 | Test: 0.763
+[Epoch 75/100] Loss: 0.7192344069480896 | Train: 0.773 | Test: 0.789
+[Epoch 76/100] Loss: 0.38603851199150085 | Train: 0.760 | Test: 0.763
+[Epoch 77/100] Loss: 0.403675377368927 | Train: 0.760 | Test: 0.789
+[Epoch 78/100] Loss: 0.48261120915412903 | Train: 0.773 | Test: 0.763
+[Epoch 79/100] Loss: 0.523385226726532 | Train: 0.767 | Test: 0.711
+[Epoch 80/100] Loss: 0.4242386817932129 | Train: 0.793 | Test: 0.789
+[Epoch 81/100] Loss: 0.5245373249053955 | Train: 0.760 | Test: 0.763
+[Epoch 82/100] Loss: 0.656798243522644 | Train: 0.760 | Test: 0.763
+[Epoch 83/100] Loss: 0.45529624819755554 | Train: 0.773 | Test: 0.789
+[Epoch 84/100] Loss: 0.4342089593410492 | Train: 0.767 | Test: 0.711
+[Epoch 85/100] Loss: 0.48741206526756287 | Train: 0.767 | Test: 0.711
+[Epoch 86/100] Loss: 0.4310532808303833 | Train: 0.780 | Test: 0.789
+[Epoch 87/100] Loss: 0.37271496653556824 | Train: 0.767 | Test: 0.789
+[Epoch 88/100] Loss: 0.4387548565864563 | Train: 0.760 | Test: 0.763
+[Epoch 89/100] Loss: 0.6904561519622803 | Train: 0.787 | Test: 0.789
+[Epoch 90/100] Loss: 0.5403684973716736 | Train: 0.787 | Test: 0.711
+[Epoch 91/100] Loss: 0.40933045744895935 | Train: 0.780 | Test: 0.711
+[Epoch 92/100] Loss: 0.45218798518180847 | Train: 0.773 | Test: 0.789
+[Epoch 93/100] Loss: 0.43576309084892273 | Train: 0.767 | Test: 0.816
+[Epoch 94/100] Loss: 0.48700150847435 | Train: 0.760 | Test: 0.816
+[Epoch 95/100] Loss: 0.22001565992832184 | Train: 0.773 | Test: 0.789
+[Epoch 96/100] Loss: 0.4472440779209137 | Train: 0.780 | Test: 0.789
+[Epoch 97/100] Loss: 0.32921576499938965 | Train: 0.773 | Test: 0.789
+[Epoch 98/100] Loss: 0.4737405478954315 | Train: 0.773 | Test: 0.816
+[Epoch 99/100] Loss: 0.3766854405403137 | Train: 0.780 | Test: 0.789
+[Epoch 100/100] Loss: 0.5510424375534058 | Train: 0.787 | Test: 0.789
